@@ -1,3 +1,8 @@
+import shutil
+
+from django.utils.crypto import get_random_string
+
+from AppUpdate.settings import TEMP_URL, LOGO_MAX_SIZE, LOGO_URL
 from Base.decorator import *
 from Base.common import *
 
@@ -36,6 +41,43 @@ def modify_apps_info(request):
 
     apps.appName = app_name
     apps.save()
+    return response()
+
+
+@require_post
+@require_json
+@require_params(['appEnglishName'])
+def modify_apps_logo(request):
+    app_english_name = request.POST['appEnglishName']
+    save_file = request.FILES.get('appLogo')
+
+    if save_file is None:
+        return error_response(Error.NOT_FOUND_LOGO)
+    if save_file.size > LOGO_MAX_SIZE:
+        return error_response(Error.LOGO_SIZE)
+
+    apps, ret_code = get_apps_by_english_name_func(app_english_name)
+    if ret_code != Error.OK:
+        return error_response(ret_code)
+
+    random_string = get_random_string(length=8)
+    file_path = os.path.join(TEMP_URL, random_string)
+    save_file_to_local(save_file, file_path)
+
+    import imghdr
+    img_type = imghdr.what(file_path)
+    if img_type != "jpeg":
+        os.remove(file_path)
+        return error_response(Error.NOT_JPEG_LOGO, append_msg='('+img_type+')')
+    else:
+        if apps.logo is not None:
+            old_file_path = os.path.join(LOGO_URL, apps.get_logo_path())
+            os.remove(old_file_path)
+        apps.logo = random_string
+        apps.save()
+        new_file_path = os.path.join(LOGO_URL, apps.get_logo_path())
+        shutil.move(file_path, new_file_path)
+
     return response()
 
 
@@ -97,7 +139,7 @@ def create_version(request):
     version = request.POST['version']
     description_encoded = request.POST['descriptionEncoded']
 
-    if not is_legal_length(description_encoded, string_max=Version.C['descriptionEncodedLength']):
+    if not is_legal_length(description_encoded, string_max=Version.C['descriptionLength']):
         return error_response(Error.ILLEGAL_DESCRIPTION_LENGTH)
 
     matched = re.search('^([a-zA-Z0-9_.\s]+)$', version)
@@ -115,13 +157,11 @@ def create_version(request):
     save_file = request.FILES.get("appFile")
     str_name = save_file.name
     ext_name = "" if str_name.find(".") == -1 else "." + str_name.split(".")[-1]
-    file_name = app_english_name+'_'+version+ext_name[:8]
+    file_name = app_english_name+'_v'+version+ext_name[:8]
     file_path = os.path.join(APP_URL, app_english_name)
     file_path = os.path.join(file_path, file_name)
-    with open(file_path, "wb+") as f:
-        for chunk in save_file.chunks():
-            f.write(chunk)
-        f.close()
+    save_file_to_local(save_file, file_path)
+
     md5, sha1 = get_file_hash(file_path)
     if md5 is None or sha1 is None:
         return error_response(Error.ERROR_GET_HASH)

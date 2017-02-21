@@ -6,6 +6,13 @@ from Apps.models import Apps, Level, Version
 from Base.error import Error
 
 
+def save_file_to_local(save_file, file_path):
+    with open(file_path, "wb+") as f:
+        for chunk in save_file.chunks():
+            f.write(chunk)
+        f.close()
+
+
 def is_legal_string(string, illegal_chars='<>;/\t\n\r\\'):
     for c in illegal_chars:
         if c in string:
@@ -27,9 +34,11 @@ def is_legal_level(level, level_min=0, level_max=10):
 
 def get_apps_by_english_name_func(app_english_name):
     try:
-        apps = Apps.objects.get(appEnglishName=app_english_name, isAlive=True)
+        apps = Apps.objects.get(appEnglishName=app_english_name)
     except:
         return None, Error.NOT_FOUND_APPS
+    if not apps.isAlive:
+        return None, Error.APPS_NOT_ALIVE
     return apps, Error.OK
 
 
@@ -57,13 +66,13 @@ def get_version_detail_func(o_version, with_url=False):
     detail = dict(
         # level=o_version.relatedLevel.level,
         # note=o_version.relatedLevel.note,
-        descriptionEncoded=o_version.descriptionEncoded,
+        descriptionEncoded=o_version.description,
         version=o_version.version,
         updateDatetime=o_version.updateDatetime.strftime("%Y-%m-%d %H:%M:%S"),
         isAlive=o_version.isAlive,
     )
 
-    if with_url and detail['isAlive']:
+    if with_url and o_version.isAlive and o_version.relatedApp.isAlive:
         detail['url'] = o_version.url
         detail['md5'] = o_version.md5
         detail['sha1'] = o_version.sha1
@@ -163,13 +172,13 @@ def create_level_func(apps, level, note):
     return o_level, Error.OK
 
 
-def create_version_func(apps, level, version, url, md5, sha1, descriptionEncoded):
+def create_version_func(apps, level, version, url, md5, sha1, description):
     o_level, ret_code = get_level_func(apps, level)
     if ret_code != Error.OK:
         return None, ret_code
 
     try:
-        o_version = Version.create(apps, o_level, version, url, md5, sha1, descriptionEncoded)
+        o_version = Version.create(apps, o_level, version, url, md5, sha1, description)
     except:
         return None, Error.ADD_VERSION_FAILED
     return o_version, Error.OK

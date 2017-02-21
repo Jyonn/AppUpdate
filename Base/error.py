@@ -1,4 +1,7 @@
 class Error:
+    NOT_JPEG_LOGO = 2021
+    LOGO_SIZE = 2020
+    NOT_FOUND_LOGO = 2019
     ILLEGAL_DESCRIPTION_LENGTH = 2018
     ILLEGAL_NOTE_LENGTH = 2017
     ILLEGAL_APP_NAME_LENGTH = 2016
@@ -25,13 +28,16 @@ class Error:
     OK = 0
 
     ERROR_DICT = [
+        (NOT_JPEG_LOGO, "错误的图标格式"),
+        (LOGO_SIZE, "图标超过最大上传限度"),
+        (NOT_FOUND_LOGO, "不存在的应用图标"),
         (ILLEGAL_DESCRIPTION_LENGTH, "非法版本描述长度"),
         (ILLEGAL_NOTE_LENGTH, "非法备注长度"),
         (ILLEGAL_APP_NAME_LENGTH, "非法应用名长度"),
         (ILLEGAL_APP_ENGLISH_NAME_LENGTH, "非法应用名英文长度"),
         (VERSION_NOT_ALIVE, "该版本已被下架"),
         (EXISTED_VERSION, "已存在的版本号"),
-        (APPS_NOT_ALIVE, "应用已被下架"),
+        (APPS_NOT_ALIVE, "应用已被下架，不支持服务"),
         (ERROR_GET_HASH, "获取文件哈希失败"),
         (ILLEGAL_VERSION, "非法版本号"),
         (ILLEGAL_LEVEL, "非法更新等级"),

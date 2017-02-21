@@ -13,7 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import static, url
+
+from AppUpdate.settings import ICO_URL
 from Apps.views import *
 from Apps.admin_views import *
 # from django.contrib import admin
@@ -21,13 +23,14 @@ from Apps.admin_views import *
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^app/create/$', create_apps),
-    url(r'^app/modify/$', modify_apps_info),
+    url(r'^app/modify-info/$', modify_apps_info),
+    url(r'^app/modify-logo/$', modify_apps_logo),
     url(r'^app/set-dead/$', set_apps_dead),
-    url(r'^app/get/$', get_apps),
+    url(r'^app/get-all/$', get_apps),
 
     url(r'^level/create/$', create_level),
-    url(r'^level/modify/$', modify_level_info),
-    url(r'^level/get/$', get_levels),
+    url(r'^level/modify-info/$', modify_level_info),
+    url(r'^level/get-all/$', get_levels),
 
     url(r'^version/create/$', create_version),
     url(r'^version/set-dead/$', set_version_dead),
@@ -37,3 +40,5 @@ urlpatterns = [
 
     url(r'^get-state/$', get_state),
 ]
+
+urlpatterns += static.static('favicon.ico', document_root=ICO_URL)

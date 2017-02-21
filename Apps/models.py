@@ -6,6 +6,7 @@ class Apps(models.Model):
         'appNameLength': 10,
         'appEnglishNameLength': 20,
         'logoLength': 30,
+        'descriptionLength': 1000,
     }
     appName = models.CharField(
         verbose_name="应用名称",
@@ -33,12 +34,25 @@ class Apps(models.Model):
         null=True,
         blank=True,
     )
+    description = models.CharField(
+        verbose_name="应用描述",
+        default=None,
+        max_length=C['descriptionLength'],
+    )
 
     @classmethod
-    def create(cls, appName, appEnglishName, logo=None):
-        app = cls(appName=appName, appEnglishName=appEnglishName, logo=logo, isAlive=True)
+    def create(cls, appName, appEnglishName, description=None, logo=None):
+        app = cls(
+            appName=appName,
+            appEnglishName=appEnglishName,
+            logo=logo,
+            isAlive=True,
+            description=description)
         app.save()
         return app
+
+    def get_logo_path(self):
+        return self.appEnglishName+'_'+self.logo+'.jpg'
 
 
 class Level(models.Model):
@@ -73,7 +87,7 @@ class Version(models.Model):
     C = {
         'versionLength': 30,
         'urlLength': 200,
-        'descriptionEncodedLength': 1000,
+        'descriptionLength': 1000,
         'md5Length': 32,
         'sha1Length': 40
     }
@@ -110,10 +124,10 @@ class Version(models.Model):
         verbose_name="是否当前等级最新版",
         default=True,
     )
-    descriptionEncoded = models.CharField(
+    description = models.CharField(
         verbose_name="更新说明",
         default=None,
-        max_length=C['descriptionEncodedLength'],
+        max_length=C['descriptionLength'],
     )
     md5 = models.CharField(
         verbose_name="安装包MD5校验",
@@ -127,17 +141,22 @@ class Version(models.Model):
     )
 
     @classmethod
-    def create(cls, relatedApp, relatedLevel, version, url, md5, sha1, descriptionEncoded=None):
-        version = cls(
+    def create(cls, relatedApp, relatedLevel, version, url, md5, sha1, description=None):
+        latest_versions = Version.objects.filter(
+            relatedApp=relatedApp, relatedLevel=relatedLevel, isLevelLatest=True)
+        for v in latest_versions:
+            v.isLevelLatest = False
+            v.save()
+        o_version = cls(
             relatedApp=relatedApp,
             relatedLevel=relatedLevel,
             version=version,
             url=url,
             md5=md5,
             sha1=sha1,
-            descriptionEncoded=descriptionEncoded,
+            description=description,
             isAlive=True,
             isLevelLatest=True,
         )
-        version.save()
-        return version
+        o_version.save()
+        return o_version

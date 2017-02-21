@@ -56,8 +56,7 @@ ROOT_URLCONF = 'AppUpdate.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,6 +124,16 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "files"),
+)
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder"
+)
+# ICO_URL = os.path.join(STATIC_URL, 'favicon.ico')
+ICO_URL = "/static/favicon.ico"
+
 
 if 'Linux' == platform.system():
     MEDIA_ROOT = '/home/web/AppUpdate'
@@ -132,3 +141,7 @@ else:
     MEDIA_ROOT = 'D:/Program/web/AppUpdate'
 
 APP_URL = os.path.join(MEDIA_ROOT, 'app', '')
+LOGO_URL = os.path.join(MEDIA_ROOT, 'logo', '')
+TEMP_URL = os.path.join(MEDIA_ROOT, 'temp', '')
+
+LOGO_MAX_SIZE = 1024 * 1024
