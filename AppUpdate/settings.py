@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Apps',
+    'Developer',
 ]
 
 MIDDLEWARE = [
@@ -120,20 +121,17 @@ USE_L10N = True
 USE_TZ = False
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
+# Static static_files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.10/howto/files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "files"),
+    os.path.join(BASE_DIR, "static_files"),
 )
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder"
 )
-# ICO_URL = os.path.join(STATIC_URL, 'favicon.ico')
-ICO_URL = "/static/favicon.ico"
-
 
 if 'Linux' == platform.system():
     MEDIA_ROOT = '/home/web/AppUpdate'

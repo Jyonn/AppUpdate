@@ -1,9 +1,31 @@
 import os
 import re
 
+import datetime
+
 from AppUpdate.settings import APP_URL
 from Apps.models import Apps, Level, Version
 from Base.error import Error
+
+
+def login_to_session(request, user):
+    """
+    更新登录数据并添加到session
+    """
+    user.lastLogin = user.thisLogin
+    user.lastIpv4 = user.thisIpv4
+    user.thisLogin = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user.thisIpv4 = request.META['HTTP_X_FORWARDED_FOR'] \
+        if 'HTTP_X_FORWARDED_FOR' in request.META else request.META['REMOTE_ADDR']
+    user.save()
+
+    try:
+        request.session.cycle_key()
+    except:
+        pass
+    request.session["uid"] = user.pk
+    request.session["isLogin"] = True
+    return None
 
 
 def save_file_to_local(save_file, file_path):

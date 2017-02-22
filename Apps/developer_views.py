@@ -7,6 +7,7 @@ from Base.decorator import *
 from Base.common import *
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appName', 'appEnglishName'])
@@ -25,6 +26,7 @@ def create_apps(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appName', 'appEnglishName'])
@@ -44,6 +46,7 @@ def modify_apps_info(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appEnglishName'])
@@ -81,6 +84,7 @@ def modify_apps_logo(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appEnglishName', 'level', 'note'])
@@ -100,6 +104,7 @@ def create_level(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appEnglishName', 'level', 'note'])
@@ -128,6 +133,7 @@ def modify_level_info(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appEnglishName', 'level', 'version', 'descriptionEncoded'])
@@ -172,6 +178,7 @@ def create_version(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appEnglishName'])
@@ -189,6 +196,7 @@ def set_apps_dead(request):
     return response()
 
 
+@require_login
 @require_post
 @require_json
 @require_params(['appEnglishName', 'version'])

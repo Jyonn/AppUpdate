@@ -78,9 +78,9 @@ class Level(models.Model):
 
     @classmethod
     def create(cls, relatedApp, level, note):
-        level = cls(relatedApp=relatedApp, level=level, note=note)
-        level.save()
-        return level
+        o_level = cls(relatedApp=relatedApp, level=level, note=note)
+        o_level.save()
+        return o_level
 
 
 class Version(models.Model):

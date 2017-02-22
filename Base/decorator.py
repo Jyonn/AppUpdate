@@ -49,3 +49,14 @@ def decorator_generator(verify_func, error_id):
             return error_response(error_id)
         return wrapper
     return decorator
+
+
+def require_login_func(request):
+    if "login" not in request.session or "uid" not in request.session:
+        return False
+    if request.session["login"] is None or request.session["iud"] is None:
+        return False
+    return request.session["login"]
+
+
+require_login = decorator_generator(require_login_func, Error.NEED_LOGIN)

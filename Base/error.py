@@ -22,6 +22,7 @@ class Error:
     NOT_FOUND_VERSION = 2002
     NOT_FOUND_LEVEL = 2001
     NOT_FOUND_APPS = 2000
+    NEED_LOGIN = 1003
     REQUIRE_JSON = 1002
     REQUIRE_PARAM = 1001
     NOT_FOUND_ERROR = 1000
@@ -51,6 +52,8 @@ class Error:
         (NOT_FOUND_VERSION, "不存在的版本"),
         (NOT_FOUND_LEVEL, "不存在的更新等级"),
         (NOT_FOUND_APPS, "不存在的应用"),
+
+        (NEED_LOGIN, "需要登录"),
         (REQUIRE_JSON, "需要JSON数据"),
         (REQUIRE_PARAM, "缺少参数"),
         (NOT_FOUND_ERROR, "不存在的错误"),
