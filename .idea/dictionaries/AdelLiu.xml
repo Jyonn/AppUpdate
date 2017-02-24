@@ -2,7 +2,13 @@
   <dictionary name="AdelLiu">
     <words>
       <w>backends</w>
+      <w>bootstrapcdn</w>
       <w>clickjacking</w>
+      <w>fezvrasta</w>
+      <w>github</w>
+      <w>maxcdn</w>
+      <w>snackbar</w>
+      <w>snackbarjs</w>
     </words>
   </dictionary>
 </component>

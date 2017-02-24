@@ -36,7 +36,7 @@ def get_state(request):
     if ret_code != Error.OK:
         return error_response(ret_code)
 
-    current_version = get_version_func(apps, version)
+    current_version, ret_code = get_version_func(apps, version)
     if ret_code != Error.OK:
         return error_response(ret_code)
 

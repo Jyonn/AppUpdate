@@ -38,6 +38,7 @@ class Apps(models.Model):
         verbose_name="应用描述",
         default=None,
         max_length=C['descriptionLength'],
+        null=True,
     )
 
     @classmethod

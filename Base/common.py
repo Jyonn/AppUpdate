@@ -6,6 +6,7 @@ import datetime
 from AppUpdate.settings import APP_URL
 from Apps.models import Apps, Level, Version
 from Base.error import Error
+from Developer.models import Developer
 
 
 def login_to_session(request, user):
@@ -26,6 +27,14 @@ def login_to_session(request, user):
     request.session["uid"] = user.pk
     request.session["isLogin"] = True
     return None
+
+
+def get_user_from_session(request):
+    try:
+        developer = Developer.objects.get(pk=request.session["uid"])
+    except:
+        return None
+    return developer
 
 
 def save_file_to_local(save_file, file_path):
@@ -73,12 +82,15 @@ def get_level_func(apps, level):
 
 
 def get_latest_version_func(apps, level):
-    versions = Version.objects.filter(
-        relatedApp=apps,
-        isLevelLatest=True,
-        isAlive=True,
-        relatedLevel__level__lte=level,
-    ).order_by('-updateDatetime')
+    try:
+        versions = Version.objects.filter(
+            relatedApp=apps,
+            isLevelLatest=True,
+            isAlive=True,
+            relatedLevel__level__lte=level,
+        ).order_by('-updateDatetime')
+    except:
+        return None, Error.NOT_FOUND_VERSION
     if versions.count() == 0:
         return None, Error.NOT_FOUND_VERSION
     return versions[0], Error.OK
@@ -86,8 +98,8 @@ def get_latest_version_func(apps, level):
 
 def get_version_detail_func(o_version, with_url=False):
     detail = dict(
-        # level=o_version.relatedLevel.level,
-        # note=o_version.relatedLevel.note,
+        level=o_version.relatedLevel.level,
+        note=o_version.relatedLevel.note,
         descriptionEncoded=o_version.description,
         version=o_version.version,
         updateDatetime=o_version.updateDatetime.strftime("%Y-%m-%d %H:%M:%S"),

@@ -7,6 +7,7 @@ class Developer(models.Model):
         verbose_name="用户名",
         max_length=16,
         default=None,
+        unique=True,
     )
     password = models.CharField(
         verbose_name="加密密码",
@@ -62,3 +63,14 @@ class Developer(models.Model):
         )
         developer.save()
         return developer
+
+    def check_password(self, raw_password):
+        password = Developer.sha_text(self.salt + raw_password)
+        return self.password == password
+
+    def set_password(self, raw_password):
+        salt = get_random_string(length=8)
+        password = Developer.sha_text(salt + raw_password)
+        self.password = password
+        self.save()
+        return None

@@ -1,4 +1,7 @@
 class Error:
+    ERROR_PASSWORD = 2024
+    FROZEN_USER = 2023
+    NOT_FOUND_USERNAME = 2022
     NOT_JPEG_LOGO = 2021
     LOGO_SIZE = 2020
     NOT_FOUND_LOGO = 2019
@@ -29,6 +32,9 @@ class Error:
     OK = 0
 
     ERROR_DICT = [
+        (ERROR_PASSWORD, "错误的用户名或密码"),
+        (FROZEN_USER, "用户已被冻结"),
+        (NOT_FOUND_USERNAME, "不存在的用户名"),
         (NOT_JPEG_LOGO, "错误的图标格式"),
         (LOGO_SIZE, "图标超过最大上传限度"),
         (NOT_FOUND_LOGO, "不存在的应用图标"),

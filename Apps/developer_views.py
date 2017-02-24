@@ -19,7 +19,7 @@ def create_apps(request):
     if ret_code != Error.OK:
         return error_response(ret_code)
 
-    o_level, ret_code = create_level_func(apps, 0, '默认')
+    o_level, ret_code = create_level_func(apps, 0, '正式版')
     if ret_code != Error.OK:
         return error_response(ret_code)
 

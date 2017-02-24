@@ -52,11 +52,11 @@ def decorator_generator(verify_func, error_id):
 
 
 def require_login_func(request):
-    if "login" not in request.session or "uid" not in request.session:
+    if "isLogin" not in request.session or "uid" not in request.session:
         return False
-    if request.session["login"] is None or request.session["iud"] is None:
+    if request.session["isLogin"] is None or request.session["uid"] is None:
         return False
-    return request.session["login"]
+    return request.session["isLogin"]
 
 
 require_login = decorator_generator(require_login_func, Error.NEED_LOGIN)

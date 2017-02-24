@@ -121,12 +121,13 @@ USE_L10N = True
 USE_TZ = False
 
 
-# Static static_files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/files/
 
 STATIC_URL = '/static/'
+STATIC_DIR_URL = os.path.join(BASE_DIR, "files")
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static_files"),
+    STATIC_DIR_URL,
 )
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -143,3 +144,5 @@ LOGO_URL = os.path.join(MEDIA_ROOT, 'logo', '')
 TEMP_URL = os.path.join(MEDIA_ROOT, 'temp', '')
 
 LOGO_MAX_SIZE = 1024 * 1024
+
+SESSION_COOKIE_AGE = 60 * 60 * 24

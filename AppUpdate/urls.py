@@ -13,29 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, static, include
+from AppUpdate.settings import STATIC_DIR_URL
 
-from Apps.views import *
-from Apps.developer_views import *
+from Developer.views import *
 # from django.contrib import admin
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
-    url(r'^app/create/$', create_apps),
-    url(r'^app/modify-info/$', modify_apps_info),
-    url(r'^app/modify-logo/$', modify_apps_logo),
-    url(r'^app/set-dead/$', set_apps_dead),
-    url(r'^app/get-all/$', get_apps),
+    url(r'^app/', include('Apps.apps_urls')),
+    url(r'^level/', include('Apps.level_urls')),
+    url(r'^version/', include('Apps.version_urls')),
 
-    url(r'^level/create/$', create_level),
-    url(r'^level/modify-info/$', modify_level_info),
-    url(r'^level/get-all/$', get_levels),
-
-    url(r'^version/create/$', create_version),
-    url(r'^version/set-dead/$', set_version_dead),
-    url(r'^version/latest/$', get_latest_version),
-    url(r'^version/get-all/$', get_versions),
-    url(r'^version/get-exact/$', get_exact_version),
-
-    url(r'^get-state/$', get_state),
+    url(r'^developer/login/$', login),
 ]
+
+urlpatterns += static.static('/', document_root=STATIC_DIR_URL)
