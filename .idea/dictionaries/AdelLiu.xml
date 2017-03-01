@@ -4,9 +4,13 @@
       <w>backends</w>
       <w>bootstrapcdn</w>
       <w>clickjacking</w>
+      <w>dropdown</w>
       <w>fezvrasta</w>
       <w>github</w>
+      <w>infobox</w>
+      <w>mailto</w>
       <w>maxcdn</w>
+      <w>navbar</w>
       <w>snackbar</w>
       <w>snackbarjs</w>
     </words>

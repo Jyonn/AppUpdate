@@ -29,10 +29,11 @@ def create_apps(request):
 @require_login
 @require_post
 @require_json
-@require_params(['appName', 'appEnglishName'])
+@require_params(['appName', 'appEnglishName', 'description'])
 def modify_apps_info(request):
     app_name = request.POST['appName']
     app_english_name = request.POST['appEnglishName']
+    description = request.POST['description']
 
     apps, ret_code = get_apps_by_english_name_func(app_english_name)
     if ret_code != Error.OK:
@@ -42,6 +43,7 @@ def modify_apps_info(request):
         return error_response(Error.ILLEGAL_APP_NAME)
 
     apps.appName = app_name
+    apps.description = description
     apps.save()
     return response()
 
@@ -69,14 +71,14 @@ def modify_apps_logo(request):
 
     import imghdr
     img_type = imghdr.what(file_path)
-    if img_type != "jpeg":
+    if img_type not in ["jpeg", "png", "bmp"]:
         os.remove(file_path)
-        return error_response(Error.NOT_JPEG_LOGO, append_msg='('+img_type+')')
+        return error_response(Error.ILLEGAL_LOGO)
     else:
         if apps.logo is not None:
             old_file_path = os.path.join(LOGO_URL, apps.get_logo_path())
             os.remove(old_file_path)
-        apps.logo = random_string
+        apps.logo = random_string+'.'+img_type
         apps.save()
         new_file_path = os.path.join(LOGO_URL, apps.get_logo_path())
         shutil.move(file_path, new_file_path)

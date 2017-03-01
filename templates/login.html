@@ -8,7 +8,6 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.json.js"></script>
     <script src="/js/ripples.min.js"></script>
     <script src="/js/material.min.js"></script>
     <link href="/css/bootstrap-material-design.css" rel="stylesheet">
@@ -240,26 +239,16 @@
           cursor: text;
         }
 
-        .well-footer {
-            text-align: right;
+        body {
+            background: url('/background.jpg') center fixed;
         }
 
-        .round-image {
-            border-radius: 50%;
+        #login-modal {
+            margin-top: 100px;
         }
 
-        .round-image-normal {
-            height: 60px;
-            width: 60px;
-        }
-
-        .round-image-small {
-            height: 35px;
-            width: 35px;
-        }
-
-        .app-item {
-            margin-bottom: 50px;
+        .div-center {
+            text-align: center;
         }
     </style>
 
@@ -279,18 +268,6 @@
             $('#navbar-login').click(function () {
                 window.location = '/app/login/redirect='+window.location.pathname;
             })
-        });
-
-        $(document).ready(function () {
-            var app_btns = $('#apps');
-            app_btns.find('.btn-primary').click(function () {
-                var appEnglishName = $(this).attr('data-unique');
-
-            });
-            app_btns.find('.btn-default').click(function () {
-                var appEnglishName = $(this).attr('data-unique');
-                window.location = '/app/detail/'+appEnglishName;
-            });
         })
     </script>
 </head>
@@ -327,42 +304,30 @@
         </div>
     </div>
 
-
     <div class="container">
-        <div class="page-header" id="banner">
-            <div class="row">
-                <h1>应用更新中心</h1>
-                <p class="lead">更多应用弱不禁风，在洪荒之路驰飞来临</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" id="apps">
         <div class="row">
-            {% for app in app_list %}
-            <div class="col-sm-6 app-item">
+            <div class="col-sm-5 col-sm-push-7" id="login-modal">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="col-sm-2">
-                            <img class="round-image round-image-normal" src='{% if app.logo %}{{ "/app/logo/"|add:app.appEnglishName|add:"_"|add:app.logo }}{% else %}{{ "/app/logo/default.png" }}{% endif %}'>
-                        </div>
-                        <div class="col-sm-10">
-                            <h4 class="modal-title">{{ app.appName }}（{{ app.appEnglishName }}）</h4>
-                            <p><b>{{ app.createDatetime }}</b> 至今，已发布 <b>{{ app.versions }}</b> 个版本。</p>
-                        </div>
+                    <div class="modal-header div-center">
+                        <h1>用户登录</h1>
                     </div>
                     <div class="modal-body">
-                        {{ app.description }}
+                        <div class="form-group label-floating">
+                          <label class="control-label" for="focusedInput1">账号</label>
+                          <input class="form-control" id="focusedInput1" type="text">
+                        </div>
+                        <div class="form-group label-floating">
+                          <label class="control-label" for="focusedInput1">密码</label>
+                          <input class="form-control" id="focusedInput1" type="password">
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-default" data-unique='{{ app.appEnglishName }}'>了解应用</button>
-                        <button class="btn btn-primary" data-unique='{{ app.appEnglishName }}'>下载正式版</button>
+                        <button class="btn btn-default">忘记密码</button>
+                        <button class="btn btn-primary">登录</button>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
     </div>
-
 </body>
 </html>

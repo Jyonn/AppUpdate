@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^get-all/$', views.get_apps),
 ] + [
     url(r'^index/$', front_views.index),
+    url(r'^login/(.*?)$', front_views.login),
+    url(r'^detail/(.*?)$', front_views.detail),
 ]
 
 urlpatterns += static.static('logo/', document_root=LOGO_URL)

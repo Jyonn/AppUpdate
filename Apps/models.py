@@ -53,7 +53,7 @@ class Apps(models.Model):
         return app
 
     def get_logo_path(self):
-        return self.appEnglishName+'_'+self.logo+'.jpg'
+        return self.appEnglishName+'_'+self.logo
 
 
 class Level(models.Model):

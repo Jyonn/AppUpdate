@@ -8,7 +8,6 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.json.js"></script>
     <script src="/js/ripples.min.js"></script>
     <script src="/js/material.min.js"></script>
     <link href="/css/bootstrap-material-design.css" rel="stylesheet">
@@ -240,26 +239,24 @@
           cursor: text;
         }
 
-        .well-footer {
-            text-align: right;
+        #login-modal {
+            margin-top: 100px;
         }
 
-        .round-image {
-            border-radius: 50%;
+        .div-center {
+            text-align: center;
         }
 
-        .round-image-normal {
-            height: 60px;
-            width: 60px;
+        pre {
+            border: none;
+            background: none;
+            margin: 0;
         }
 
-        .round-image-small {
-            height: 35px;
-            width: 35px;
-        }
-
-        .app-item {
-            margin-bottom: 50px;
+        #version-list .btn {
+            margin: 0;
+            padding: 0;
+            color: #009688;
         }
     </style>
 
@@ -282,15 +279,14 @@
         });
 
         $(document).ready(function () {
-            var app_btns = $('#apps');
-            app_btns.find('.btn-primary').click(function () {
-                var appEnglishName = $(this).attr('data-unique');
-
-            });
-            app_btns.find('.btn-default').click(function () {
-                var appEnglishName = $(this).attr('data-unique');
-                window.location = '/app/detail/'+appEnglishName;
-            });
+            var dl_btns = $('#version-list');
+            dl_btns.find('.btn').click(function () {
+                $(this).attr('data-unique');
+                var dialog = $('#file-dl-dialog');
+                dialog.find('#md5').text('MD5 :'+$(this).attr('data-md5'));
+                dialog.find('#sha1').text('SHA1:'+$(this).attr('data-sha1'));
+                window.location = '/app/dl/{{ app_detail.appEnglishName }}/'+$(this).attr('data-url');
+            })
         })
     </script>
 </head>
@@ -327,42 +323,44 @@
         </div>
     </div>
 
-
     <div class="container">
         <div class="page-header" id="banner">
             <div class="row">
-                <h1>应用更新中心</h1>
-                <p class="lead">更多应用弱不禁风，在洪荒之路驰飞来临</p>
+                <h1>{{ app_detail.appName }}（{{ app_detail.appEnglishName }}）</h1>
+                <p class="lead"><b>{{ app_detail.createDatetime }}</b> 至今，已发布 <b>{{ app_detail.versions }}</b> 个版本。</p>
+                <p>
+                    {{ app_detail.description }}
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="container" id="apps">
-        <div class="row">
-            {% for app in app_list %}
-            <div class="col-sm-6 app-item">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="col-sm-2">
-                            <img class="round-image round-image-normal" src='{% if app.logo %}{{ "/app/logo/"|add:app.appEnglishName|add:"_"|add:app.logo }}{% else %}{{ "/app/logo/default.png" }}{% endif %}'>
-                        </div>
-                        <div class="col-sm-10">
-                            <h4 class="modal-title">{{ app.appName }}（{{ app.appEnglishName }}）</h4>
-                            <p><b>{{ app.createDatetime }}</b> 至今，已发布 <b>{{ app.versions }}</b> 个版本。</p>
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        {{ app.description }}
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-unique='{{ app.appEnglishName }}'>了解应用</button>
-                        <button class="btn btn-primary" data-unique='{{ app.appEnglishName }}'>下载正式版</button>
-                    </div>
+    <div class="container" id="version-list">
+        {% for version in version_list %}
+        <div class="col-sm-12">
+            <div class="col-sm-8 col-sm-push-{{ version.offset }}">
+                <div class="well well-lg">
+                    <p><b>{{ version.note }}</b> 已更新至 <b>{{ version.version }}</b> 于 {{ version.updateDatetime }}，<button class="btn" data-toggle="modal" data-target="#file-dl-dialog" data-version="{{ version.version }}" data-md5="{{ version.md5 }}" data-sha1="{{ version.sha1 }}" data-url="{{ version.url }}">点击下载</button></p>
+                    <pre>{{ version.description }}</pre>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 
+    <div id="file-dl-dialog" class="modal fade" tabindex="-1" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h2 class="modal-title">感谢下载</h2>
+          </div>
+          <div class="modal-body">
+              <p id="md5"></p>
+              <p id="sha1"></p>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>

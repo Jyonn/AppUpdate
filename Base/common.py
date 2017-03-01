@@ -9,6 +9,45 @@ from Base.error import Error
 from Developer.models import Developer
 
 
+def get_readable_time_string(t, only_date=False):
+    ret_str = str(t.year) + "年"
+    if t.month < 10:
+        ret_str += "0"
+    ret_str += str(t.month) + "月"
+    if t.day < 10:
+        ret_str += "0"
+    ret_str += str(t.day) + "日 "
+    if only_date:
+        return ret_str
+    if t.hour < 10:
+        ret_str += "0"
+    ret_str += str(t.hour) + "时"
+    if t.minute < 10:
+        ret_str += "0"
+    ret_str += str(t.minute) + "分"
+
+    return ret_str
+
+
+def get_relevant_time(that_time):
+    timestamp_now = int(datetime.datetime.now().timestamp())
+    timestamp_crt = int(that_time.timestamp())
+    dist = timestamp_now - timestamp_crt
+    if dist < 60:
+        dist_str = str(int(dist)) + "秒前"
+    elif dist < 60 * 60:
+        dist_str = str(int(dist / 60)) + "分钟前"
+    elif dist < 60 * 60 * 24:
+        dist_str = str(int(dist / 60 / 60)) + "小时前"
+    elif dist < 60 * 60 * 24 * 30:
+        dist_str = str(int(dist / 60 / 60 / 24)) + "天前"
+    elif dist < 60 * 60 * 24 * 365:
+        dist_str = str(int(dist / 60 / 60 / 24 / 30)) + "个月前"
+    else:
+        dist_str = str(int(dist / 60 / 60 / 24 / 365)) + "年前"
+    return dist_str
+
+
 def login_to_session(request, user):
     """
     更新登录数据并添加到session
@@ -81,14 +120,17 @@ def get_level_func(apps, level):
     return o_level, Error.OK
 
 
-def get_latest_version_func(apps, level):
+def get_latest_version_func(apps, level, force_level=False):
     try:
         versions = Version.objects.filter(
             relatedApp=apps,
             isLevelLatest=True,
             isAlive=True,
-            relatedLevel__level__lte=level,
         ).order_by('-updateDatetime')
+        if force_level:
+            versions = versions.filter(relatedLevel__level=level)
+        else:
+            versions = versions.filter(relatedLevel__level__lte=level)
     except:
         return None, Error.NOT_FOUND_VERSION
     if versions.count() == 0:
@@ -100,9 +142,10 @@ def get_version_detail_func(o_version, with_url=False):
     detail = dict(
         level=o_version.relatedLevel.level,
         note=o_version.relatedLevel.note,
-        descriptionEncoded=o_version.description,
+        description=o_version.description,
         version=o_version.version,
-        updateDatetime=o_version.updateDatetime.strftime("%Y-%m-%d %H:%M:%S"),
+        updateDatetime=get_readable_time_string(o_version.updateDatetime, only_date=True),
+        relevantTime=get_relevant_time(o_version.updateDatetime),
         isAlive=o_version.isAlive,
     )
 
@@ -124,6 +167,20 @@ def get_version_func(apps, version):
         return None, Error.NOT_FOUND_VERSION
 
 
+def get_app_detail(app):
+    versions = Version.objects.filter(relatedApp=app, isAlive=True)
+    return dict(
+        appName=app.appName,
+        appEnglishName=app.appEnglishName,
+        createDatetime=get_readable_time_string(app.createDatetime),
+        relevantTime=get_relevant_time(app.createDatetime),
+        isAlive=app.isAlive,
+        logo=app.logo,
+        versions=versions.count(),
+        description=app.description,
+    )
+
+
 def get_app_list_func():
     apps = Apps.objects.all()
 
@@ -133,10 +190,12 @@ def get_app_list_func():
         detail_dict.append(dict(
             appName=app.appName,
             appEnglishName=app.appEnglishName,
-            createDatetime=app.createDatetime.strftime("%Y-%m-%d %H:%M:%S"),
+            createDatetime=get_readable_time_string(app.createDatetime),
+            relevantTime=get_relevant_time(app.createDatetime),
             isAlive=app.isAlive,
             logo=app.logo,
             versions=versions.count(),
+            description=app.description,
         ))
     return detail_dict
 
@@ -149,7 +208,7 @@ def get_level_list_func(apps):
 
     detail_dict = []
     for o_level in levels:
-        versions = Version.objects.filter(relatedApp=apps, relatedLevel=o_level)
+        versions = Version.objects.filter(relatedApp=apps, relatedLevel=o_level, isAlive=True)
         detail_dict.append(dict(
             level=o_level.level,
             note=o_level.note,
