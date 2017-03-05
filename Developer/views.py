@@ -24,6 +24,13 @@ def login(request):
 
 
 @require_post
+def logout(request):
+    request.session["isLogin"] = None
+    request.session["uid"] = None
+    return response()
+
+
+@require_post
 @require_json
 @require_params(["old_password", "new_password"])
 @require_login

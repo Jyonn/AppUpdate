@@ -2,267 +2,142 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>App Update Center</title>
+    <title>{{ app.appName }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">ub
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.json.js"></script>
+    <script src="/js/base64.min.js"></script>
     <script src="/js/ripples.min.js"></script>
     <script src="/js/material.min.js"></script>
     <link href="/css/bootstrap-material-design.css" rel="stylesheet">
     <link href="/css/ripples.min.css" rel="stylesheet">
-    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
+{#    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">#}
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="/js/modernizr.touch.js"></script>
+    <link href="/css/mfb.min.css" rel="stylesheet">
+    <script src="/js/mfb.min.js"></script>
     <style>
-        body {
-          padding-top: 50px
+        .round-image {
+            border-radius: 50%;
+            border: 3px solid #cccccc;
         }
 
-        #banner {
-          border-bottom: none
+        {% if request.session.isLogin %}
+        #app-title:hover, #app-desc:hover {
+            border: 1px dashed #009688;
+            cursor: pointer;
+        }
+        .round-image:hover {
+            border: 3px solid #009688;
+            cursor: pointer;
+        }
+        {% endif %}
+
+        .round-image-large {
+            height: 100px;
+            width: 100px;
         }
 
-        .page-header h1 {
-          font-size: 4em
-        }
-
-        .bs-docs-section {
-          margin-top: 8em
-        }
-
-        .bs-component {
-          position: relative
-        }
-
-        .bs-component .modal {
-          position: relative;
-          top: auto;
-          right: auto;
-          left: auto;
-          bottom: auto;
-          z-index: 1;
-          display: block
-        }
-
-        .bs-component .modal-dialog {
-          width: 90%
-        }
-
-        .bs-component .popover {
-          position: relative;
-          display: inline-block;
-          width: 220px;
-          margin: 20px
-        }
-
-        #source-button {
-          position: absolute;
-          top: 0;
-          right: 0;
-          z-index: 100;
-          font-weight: bold;
-          padding: 5px 10px;
-        }
-
-        .progress {
-          margin-bottom: 10px
-        }
-
-        footer {
-          margin: 5em 0
-        }
-
-        footer li {
-          float: left;
-          margin-right: 1.5em;
-          margin-bottom: 1.5em
-        }
-
-        footer p {
-          clear: left;
-          margin-bottom: 0
-        }
-
-        .splash {
-          padding: 4em 0 0;
-          background-color: #141d27;
-          color: #fff;
-          text-align: center
-        }
-
-        .splash h1 {
-          font-size: 4em
-        }
-
-        .splash #social {
-          margin: 2em 0
-        }
-
-        .splash .alert {
-          margin: 2em 0
-        }
-
-        .section-tout {
-          padding: 4em 0 3em;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-          background-color: #eaf1f1
-        }
-
-        .section-tout .fa {
-          margin-right: .5em
-        }
-
-        .section-tout p {
-          margin-bottom: 3em
-        }
-
-        .section-preview {
-          padding: 4em 0 4em
-        }
-
-        .section-preview .preview {
-          margin-bottom: 4em;
-          background-color: #eaf1f1
-        }
-
-        .section-preview .preview .image {
-          position: relative
-        }
-
-        .section-preview .preview .image:before {
-          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: "";
-          pointer-events: none
-        }
-
-        .section-preview .preview .options {
-          padding: 1em 2em 2em;
-          border: 1px solid rgba(0, 0, 0, 0.05);
-          border-top: none;
-          text-align: center
-        }
-
-        .section-preview .preview .options p {
-          margin-bottom: 2em
-        }
-
-        .section-preview .dropdown-menu {
-          text-align: left
-        }
-
-        .section-preview .lead {
-          margin-bottom: 2em
-        }
-
-        @media (max-width: 767px) {
-          .section-preview .image img {
-            width: 100%
-          }
-        }
-
-        .sponsor {
-          text-align: center
-        }
-
-        .sponsor a:hover {
-          text-decoration: none
-        }
-
-        @media (max-width: 767px) {
-          #banner {
-            margin-bottom: 2em;
-            text-align: center
-          }
-        }
-
-        .infobox .btn-sup {
-          color: rgba(0, 0, 0, 0.5);
-          font-weight: bold;
-          font-size: 15px;
-          line-height: 30px;
-        }
-
-        .infobox .btn-sup img {
-          opacity: 0.5;
-          height: 30px;
-        }
-
-        .infobox .btn-sup span {
-          padding-left: 10px;
-          position: relative;
-          top: 2px;
-        }
-
-        .icons-material .row {
-          margin-bottom: 20px;
-        }
-
-        .icons-material .col-xs-2 {
-          text-align: center;
-        }
-
-        .icons-material i {
-          font-size: 34pt;
-        }
-
-        .icon-preview {
-          display: inline-block;
-          padding: 10px;
-          margin: 10px;
-          background: #D5D5D5;
-          border-radius: 3px;
-          cursor: pointer;
-        }
-
-        .icon-preview span {
-          display: none;
-          position: absolute;
-          background: black;
-          color: #EEE;
-          padding: 5px 8px;
-          font-size: 15px;
-          border-radius: 2px;
-          z-index: 10;
-        }
-
-        .icon-preview:hover i {
-          color: #4285f4;
-        }
-
-        .icon-preview:hover span {
-          display: block;
-          cursor: text;
-        }
-
-        #login-modal {
-            margin-top: 100px;
-        }
-
-        .div-center {
+        .image-middle {
+            margin-top: 30px;
+            margin-bottom: 30px;
             text-align: center;
         }
 
-        pre {
-            border: none;
-            background: none;
-            margin: 0;
+        #app-logo-modify {
+            display: none;
         }
 
-        #version-list .btn {
-            margin: 0;
+        .panel-body {
             padding: 0;
+            height: 50px;
+        }
+
+        #level-list .btn:not(btn-raised) {
             color: #009688;
         }
+
+        .square-btn {
+            height: inherit;
+            text-align: center;
+            padding: 15px 0;
+            margin: 0;
+            display: block;
+        }
+
+        .adverse-square {
+            height: inherit;
+            text-align: center;
+            padding: 15px 0;
+            margin: 0;
+            display: block;
+            background: #009688;
+            color: #fff;
+        }
+
+        .warning-help {
+            color: #f44336;
+        }
+
+        .success-help {
+            color: #009688;
+        }
+
     </style>
 
     <script>
+        {% if request.session.isLogin %}
+        function postForm(url, form_data, success_function) {
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data : form_data,
+                processData : false,
+                async: true,
+                dataType : '',
+                contentType : false,
+                success : success_function,
+                error : function(xhr, error, exception) {
+                    // handle the error.
+                    alert(exception.toString());
+                }
+            });
+        }
+
+        function postJSON(url, json_str, success_function) {
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data : json_str,
+                async: true,
+                dataType : 'json',
+                contentType : 'application/text',
+                success : success_function,
+                error : function(xhr, error, exception) {
+                    // handle the error.
+                    alert(exception.toString());
+                }
+            });
+        }
+
+        function encodedJSON(dict) {
+            for (var key in dict)
+                if (dict.hasOwnProperty(key)) {
+                    dict[key] = Base64.encode(dict[key]);
+                }
+            return $.toJSON(dict)
+        }
+        {% endif %}
+
         $(function () {
             $.material.init();
+            $('[data-toggle="tooltip"]').tooltip();
         });
 
         $(document).ready(function () {
@@ -273,49 +148,277 @@
             dropdown.find('#open-source').click(function () {
                 window.open('https://github.com/lqj679ssn/');
             });
+            {% if request.session.isLogin %}
+            $('#navbar-logout').click(function () {
+                postJSON('/developer/logout/', '', function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    window.location.reload();
+                });
+            });
+            {% else %}
             $('#navbar-login').click(function () {
                 window.location = '/app/login/redirect='+window.location.pathname;
-            })
+            });
+            {% endif %}
+            $('.navbar-brand').click(function () {
+                window.location = '/';
+            });
         });
 
         $(document).ready(function () {
-            var dl_btns = $('#version-list');
-            dl_btns.find('.btn').click(function () {
-                $(this).attr('data-unique');
+            $("#loading").fadeOut(1500);
+            var level_list = $('#level-list');
+            level_list.find('.dl-btn').click(function () {
+                if ($(this).attr('data-url') == "")
+                    return;
                 var dialog = $('#file-dl-dialog');
                 dialog.find('#md5').text('MD5 :'+$(this).attr('data-md5'));
                 dialog.find('#sha1').text('SHA1:'+$(this).attr('data-sha1'));
-                window.location = '/app/dl/{{ app_detail.appEnglishName }}/'+$(this).attr('data-url');
-            })
-        })
+                window.location = '/app/dl/{{ app.appEnglishName }}/'+$(this).attr('data-url');
+            });
+
+            {% if request.session.isLogin %}
+            var level_modify_dialog = $('#level-modify-dialog'),
+                level_modify_levelInput = level_modify_dialog.find('#levelInput'),
+                level_modify_levelNoteInput = level_modify_dialog.find('#levelNoteInput');
+            level_list.find('.edit-btn').click(function () {
+                level_modify_levelInput.val($(this).attr('data-level'));
+                level_modify_levelNoteInput.val($(this).attr('data-note'));
+            });
+            level_modify_dialog.find('.btn-primary').click(function () {
+                var level = level_modify_levelInput.val(),
+                    note = level_modify_levelNoteInput.val(),
+                    post = { appEnglishName: '{{ app.appEnglishName }}', level: level, note: note},
+                    json_str = encodedJSON(post);
+                postJSON('/level/modify-info/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    var level_block = $('#lv-' + level);
+                    level_block.find('.note').text(note);
+                })
+            });
+
+            var app_logo = $('#app-logo'),
+                logo_input = $('#app-logo-modify');
+            app_logo.click(function () {
+                logo_input.click();
+            });
+            logo_input.change(function () {
+                if (logo_input.val() == '')
+                    return;
+                var form = new FormData();
+                form.append('appEnglishName', '{{ app.appEnglishName }}');
+                form.append('appLogo', logo_input[0].files[0]);
+                logo_input.val('');
+                postForm('/app/modify-logo/', form, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    app_logo.attr('src', response.body)
+                });
+            });
+
+            $('#app-title').click(modify_app_info_func);
+            $('#app-desc').click(modify_app_info_func);
+
+            var modify_dialog = $('#info-modify-dialog');
+            modify_dialog.find('#descriptionInput').on('input', update_desc_count);
+            modify_dialog.find('.btn-primary').click(function () {
+                var appNameInput = $('#appNameInput'),
+                    appEnglishInput = $('#appEnglishNameInput'),
+                    descriptionInput = $('#descriptionInput'),
+                    appName = appNameInput.val(),
+                    appEnglishName = appEnglishInput.val(),
+                    description = descriptionInput.val(),
+                    post = { appName: appName, appEnglishName: appEnglishName, description: description },
+                    json_str = encodedJSON(post);
+                postJSON('/app/modify-info/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    else {
+                        $('title').text(appName);
+                        $('#appName').text(appName);
+                        $('#app-desc').text(description);
+                    }
+                });
+            });
+
+            var delete_dialog = $('#app-delete-dialog'),
+                delete_button = delete_dialog.find('.btn-primary');
+            delete_button.attr('disabled', 'disabled');
+            delete_dialog.find('#appEnglishNameInput').on('input', function () {
+                if ($(this).val() == '{{ app.appEnglishName }}')
+                    delete_button.attr('disabled', null);
+                else
+                    delete_button.attr('disabled', 'disabled');
+            });
+            delete_button.click(function () {
+                var appEnglishName = '{{ app.appEnglishName }}',
+                    post = { appEnglishName: appEnglishName },
+                    json_str = encodedJSON(post);
+                postJSON('/app/set-dead/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    window.location = '/app/index/';
+                });
+            });
+            {% endif %}
+
+            level_list.find('.dl-btn').mouseleave(function () {
+                $(this).html('<i class="ion-android-download"></i>');
+            });
+            level_list.find('.dl-btn').mouseenter(function () {
+                $(this).html('下载');
+            });
+            level_list.find('.more-btn').mouseleave(function () {
+                $(this).html('<i class="ion-android-more-horizontal"></i>');
+            });
+            level_list.find('.more-btn').mouseenter(function () {
+                $(this).html('更多');
+            });
+            level_list.find('.edit-btn').mouseleave(function () {
+                $(this).html('<i class="ion-edit"></i>');
+            });
+            level_list.find('.edit-btn').mouseenter(function () {
+                $(this).html('编辑');
+            });
+
+            {% if request.session.isLogin %}
+            var level_add_dialog = $('#level-add-dialog'),
+                levelInput = level_add_dialog.find('#levelInput'),
+                level_add_button = level_add_dialog.find('.btn-primary'),
+                level_add_help = level_add_dialog.find('.help-block');
+            levelInput.on('input', function () {
+                var post = { appEnglishName: '{{ app.appEnglishName }}', level: levelInput.val() },
+                    json_str = encodedJSON(post);
+                postJSON('/version/exist/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    else {
+                        if (response.body == true)
+                            level_add_help.html('<b class="warning-help">已存在的更新等级</b>');
+                        else
+                            level_add_help.html('<b class="success-help">可添加的更新等级</b>');
+                    }
+                });
+            });
+            level_add_button.click(function () {
+                var post = {
+                    appEnglishName: '{{ app.appEnglishName }}',
+                    level: levelInput.val(),
+                    note: level_add_dialog.find('#levelNoteInput').val()
+                },  json_str = encodedJSON(post);
+                postJSON('/level/create/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    window.location.reload();
+                });
+            });
+
+            var version_add_dialog = $('#version-add-dialog');
+            version_add_dialog.find('.btn-primary').click(function () {
+                var option = version_add_dialog.find('option:selected'),
+                    s_level = option.attr('data-level'),
+                    versionInput = version_add_dialog.find('#versionInput'),
+                    descriptionInput = version_add_dialog.find('#descriptionInput'),
+                    appFileInput = version_add_dialog.find('#appFile');
+                var form = new FormData();
+                form.append('appEnglishName', '{{ app.appEnglishName }}');
+                form.append('level', s_level);
+                form.append('version', versionInput.val());
+                form.append('description', descriptionInput.val());
+                form.append('appFile', appFileInput[0].files[0]);
+                if (appFileInput[0].files[0].size > 10*1024*1024) {
+                    alert("应用大小不得超过10M。");
+                    return;
+                }
+                $("#loading").fadeIn(500);
+                postForm('/version/create/', form, function (response) {
+                    $("#loading").fadeOut(500);
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    } else {
+                        var level = $('#lv-' + s_level),
+                            dl_btn = level.find('.dl-btn');
+                        level.find('.version').text(versionInput.val());
+                        dl_btn.attr('data-target', '#file-dl-dialog');
+                        dl_btn.attr('data-version', versionInput.val());
+                        dl_btn.attr('data-md5', response.body.md5);
+                        dl_btn.attr('data-sha1', response.body.sha1);
+                        dl_btn.attr('data-url', response.body.url);
+                        versionInput.val('');
+                        descriptionInput.val('');
+                        appFileInput.val('');
+                    }
+                });
+            });
+            {% endif %}
+        });
+
+        {% if request.session.isLogin %}
+        function modify_app_info_func() {
+            var modify_dialog = $('#info-modify-dialog'),
+                appName = $('#appName'),
+                appEnglishName = $('#appEnglishName'),
+                appDescription = $('#app-desc');
+            modify_dialog.find('#appNameInput').val(appName.text());
+            modify_dialog.find('#appEnglishNameInput').val(appEnglishName.text());
+            modify_dialog.find('#descriptionInput').val(appDescription.text());
+            update_desc_count();
+        }
+
+        function update_desc_count() {
+            var descriptionInput = $('#descriptionInput'),
+                count = descriptionInput.val().length,
+                desc_count = $('#desc_count');
+            desc_count.text(count);
+            if (count > 1000)
+                desc_count.css('color', '#f44336');
+            else
+                desc_count.css('color', '#009688');
+        }
+        {% endif %}
     </script>
 </head>
 <body>
+    <div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand">主页</a>
+                <a class="navbar-brand hand_pt">主页</a>
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a>Active</a></li>
-                    <li><a>Link</a></li>
-                </ul>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control col-md-8" placeholder="搜索关键词">
-                    </div>
-                </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a id="navbar-login">登录</a></li>
+                {% if request.session.isLogin %}
+                    <li><a id="navbar-logout" class="hand_pt">登出</a></li>
+                {% else %}
+                    <li><a id="navbar-login" class="hand_pt">登录</a></li>
+                {% endif %}
                     <li class="dropdown">
-                        <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a data-target="#" class="dropdown-toggle hand_pt" data-toggle="dropdown">
                             更多<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a id="connect-me">联系作者</a></li>
+                            <li><a id="connect-me" class="hand_pt">联系作者</a></li>
                             <li class="divider"></li>
-                            <li><a id="open-source">代码开放</a></li>
+                            <li><a id="open-source" class="hand_pt">代码开放</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -326,41 +429,233 @@
     <div class="container">
         <div class="page-header" id="banner">
             <div class="row">
-                <h1>{{ app_detail.appName }}（{{ app_detail.appEnglishName }}）</h1>
-                <p class="lead"><b>{{ app_detail.createDatetime }}</b> 至今，已发布 <b>{{ app_detail.versions }}</b> 个版本。</p>
-                <p>
-                    {{ app_detail.description }}
-                </p>
+                <div class="col-sm-8 col-sm-push-1">
+                    <h1 id="app-title" data-toggle="modal" data-target="#info-modify-dialog">
+                        <text id="appName">{{ app.appName }}</text>（<text id="appEnglishName">{{ app.appEnglishName }}</text>）</h1>
+                    <p class="lead"><b>{{ app.createDatetime }}</b> 至今，已发布 <b>{{ app.versions }}</b> 个版本。</p>
+                </div>
+                <div class="col-sm-2 col-sm-push-1 image-middle">
+                    <label for="app-logo">
+                        <img id="app-logo" class="round-image round-image-large" src='{{ app.logo }}' {% if request.session.isLogin %} data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改图标" {% endif %}>
+                        {% if request.session.isLogin %}<input name="appLogo" id="app-logo-modify" type="file" accept="image/jpg,image/png,image/jpeg,image/bmp"/>{% endif %}
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10 col-sm-push-1">
+                    <pre id="app-desc" data-toggle="modal" data-target="#info-modify-dialog">{{ app.description }}</pre>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container" id="version-list">
-        {% for version in version_list %}
-        <div class="col-sm-12">
-            <div class="col-sm-8 col-sm-push-{{ version.offset }}">
-                <div class="well well-lg">
-                    <p><b>{{ version.note }}</b> 已更新至 <b>{{ version.version }}</b> 于 {{ version.updateDatetime }}，<button class="btn" data-toggle="modal" data-target="#file-dl-dialog" data-version="{{ version.version }}" data-md5="{{ version.md5 }}" data-sha1="{{ version.sha1 }}" data-url="{{ version.url }}">点击下载</button></p>
-                    <pre>{{ version.description }}</pre>
+
+    <div class="container" id="level-list">
+        {% for level in levels %}
+        <div class="col-sm-12" id="lv-{{ level.level }}">
+            <div class="col-sm-10 col-sm-push-1">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-xs-1 adverse-square">{{ level.level }}</div>
+                        <div class="col-xs-2 square-btn"><b class="note">{{ level.note }}</b></div>
+                        <div class="col-xs-3 adverse-square version">{% if level.latest.version  %}{{ level.latest.version }}{% else %}暂无{% endif %}</div>
+                        <div class="col-xs-{% if request.session.isLogin %}2{% else %}3{% endif %} btn square-btn dl-btn" {% if level.latest.version  %}data-toggle="modal" data-target="#file-dl-dialog" data-version="{{ level.latest.version }}" data-md5="{{ level.latest.md5 }}" data-sha1="{{ level.latest.sha1 }}" data-url="{{ level.latest.url }}" {% else %} disabled="disabled" {% endif %}><i class="ion-android-download"></i></div>
+                    {% if request.session.isLogin %}
+                        <div class="col-xs-2 btn square-btn edit-btn" data-toggle="modal" data-target="#level-modify-dialog" data-note="{{ level.note }}" data-level="{{ level.level }}"><i class="ion-edit"></i></div>
+                    {% endif %}
+                        <div class="col-xs-{% if request.session.isLogin %}2{% else %}3{% endif %} btn square-btn more-btn"><i class="ion-android-more-horizontal"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
-    <div id="file-dl-dialog" class="modal fade" tabindex="-1" style="display: none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h2 class="modal-title">感谢下载</h2>
-          </div>
-          <div class="modal-body">
-              <p id="md5"></p>
-              <p id="sha1"></p>
-          </div>
-        </div>
-      </div>
-    </div>
 </body>
+
+<div id="file-dl-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">感谢下载</h1>
+            </div>
+            <div class="modal-body">
+                <p id="md5">MD5 :</p>
+                <p id="sha1">SHA1:</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.session.isLogin %}
+
+<ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
+    <li class="mfb-component__wrap">
+        <a class="mfb-component__button--main">
+            <i class="mfb-component__main-icon--resting ion-plus-round"></i>
+            <i class="mfb-component__main-icon--active ion-close-round"></i>
+        </a>
+        <ul class="mfb-component__list">
+            <li>
+                <a data-mfb-label="更新版本" class="mfb-component__button--child" data-toggle="modal" data-target="#version-add-dialog">
+                    <i class="mfb-component__child-icon ion-android-arrow-up"></i>
+                </a>
+            </li>
+            <li>
+                <a data-mfb-label="添加更新等级" class="mfb-component__button--child" data-toggle="modal" data-target="#level-add-dialog">
+                    <i class="mfb-component__child-icon ion-android-add"></i>
+                </a>
+            </li>
+            <li>
+                <a data-mfb-label="删除应用" class="mfb-component__button--child" data-toggle="modal" data-target="#app-delete-dialog">
+                    <i class="mfb-component__child-icon ion-android-delete"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<div id="info-modify-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">修改应用信息</h1>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="appNameInput">应用名称</label>
+                    <input class="form-control" id="appNameInput" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="appEnglishNameInput">应用英文名</label>
+                    <input class="form-control" id="appEnglishNameInput" type="text" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label for="descriptionInput" class="control-label">应用介绍</label>
+                    <textarea class="form-control" rows="3" id="descriptionInput"> </textarea>
+                    <span class="help-block"><b id="desc_count">0</b> / 1000</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" data-dismiss="modal">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="app-delete-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">删除应用</h1>
+            </div>
+            <div class="modal-body">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="appEnglishNameInput">输入应用英文名以确认删除</label>
+                    <input class="form-control" id="appEnglishNameInput" type="text">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" data-dismiss="modal">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="level-add-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">添加更新等级</h1>
+            </div>
+            <div class="modal-body">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="levelInput">更新等级</label>
+                    <input class="form-control" id="levelInput" type="number" max="10" min="0">
+                    <span class="help-block"></span>
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="levelNoteInput">等级说明</label>
+                    <input class="form-control" id="levelNoteInput" type="text">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" data-dismiss="modal">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="level-modify-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">修改等级信息</h1>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="levelInput">更新等级</label>
+                    <input class="form-control" id="levelInput" type="number" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="levelNoteInput">等级说明</label>
+                    <input class="form-control" id="levelNoteInput" type="text">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" data-dismiss="modal">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="version-add-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">更新版本</h1>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="versionInput">版本号</label>
+                    <input class="form-control" id="versionInput" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="select-level" class="control-label">更新等级</label>
+                    <select id="select-level" class="form-control">
+                        {% for level in levels %}
+                        <option data-level="{{ level.level }}">{{ level.note }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="descriptionInput">更新说明</label>
+                    <textarea class="form-control" rows="3" id="descriptionInput"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="appFile" class="control-label">应用程序（不得超过10M）</label>
+                    <input type="text" readonly="" class="form-control" placeholder="从本地文件夹中选择……">
+                    <input type="file" id="appFile" multiple="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" data-dismiss="modal">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
 </html>

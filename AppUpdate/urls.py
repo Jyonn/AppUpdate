@@ -17,14 +17,16 @@ from django.conf.urls import url, static, include
 from AppUpdate.settings import STATIC_DIR_URL
 
 from Developer.views import *
-# from django.contrib import admin
+from Apps.front_views import index
 
 urlpatterns = [
     url(r'^app/', include('Apps.apps_urls')),
     url(r'^level/', include('Apps.level_urls')),
     url(r'^version/', include('Apps.version_urls')),
 
-    url(r'^developer/login/$', login),
+    url(r'^developer/', include('Developer.urls')),
+] + [
+    url(r'^$', index),
 ]
 
 urlpatterns += static.static('/', document_root=STATIC_DIR_URL)

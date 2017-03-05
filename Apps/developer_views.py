@@ -2,7 +2,7 @@ import shutil
 
 from django.utils.crypto import get_random_string
 
-from AppUpdate.settings import TEMP_URL, LOGO_MAX_SIZE, LOGO_URL
+from AppUpdate.settings import TEMP_URL, LOGO_MAX_SIZE, LOGO_URL, APP_MAX_SIZE
 from Base.decorator import *
 from Base.common import *
 
@@ -10,12 +10,13 @@ from Base.common import *
 @require_login
 @require_post
 @require_json
-@require_params(['appName', 'appEnglishName'])
+@require_params(['appName', 'appEnglishName', 'description'])
 def create_apps(request):
     app_name = request.POST['appName']
     app_english_name = request.POST['appEnglishName']
+    description = request.POST['description']
 
-    apps, ret_code = create_app_func(app_name, app_english_name)
+    apps, ret_code = create_app_func(app_name, app_english_name, description)
     if ret_code != Error.OK:
         return error_response(ret_code)
 
@@ -51,7 +52,7 @@ def modify_apps_info(request):
 @require_login
 @require_post
 @require_json
-@require_params(['appEnglishName'])
+@require_params(['appEnglishName'], decode=False)
 def modify_apps_logo(request):
     app_english_name = request.POST['appEnglishName']
     save_file = request.FILES.get('appLogo')
@@ -78,12 +79,13 @@ def modify_apps_logo(request):
         if apps.logo is not None:
             old_file_path = os.path.join(LOGO_URL, apps.get_logo_path())
             os.remove(old_file_path)
-        apps.logo = random_string+'.'+img_type
+        ret_path = random_string+'.'+img_type
+        apps.logo = ret_path
         apps.save()
         new_file_path = os.path.join(LOGO_URL, apps.get_logo_path())
         shutil.move(file_path, new_file_path)
 
-    return response()
+    return response(body='/app/logo/'+app_english_name+'_'+ret_path)
 
 
 @require_login
@@ -138,16 +140,21 @@ def modify_level_info(request):
 @require_login
 @require_post
 @require_json
-@require_params(['appEnglishName', 'level', 'version', 'descriptionEncoded'])
+@require_params(['appEnglishName', 'level', 'version', 'description'], decode=False)
 def create_version(request):
-    if request.FILES.get("appFile") is None:
+    app_file = request.FILES.get("appFile")
+    if app_file is None:
         return error_response(Error.NOT_FOUND_FILE)
+
+    if app_file.size > APP_MAX_SIZE:
+        return error_response(Error.APP_FILE_SIZE)
+
     app_english_name = request.POST['appEnglishName']
     level = request.POST['level']
     version = request.POST['version']
-    description_encoded = request.POST['descriptionEncoded']
+    description = request.POST['description']
 
-    if not is_legal_length(description_encoded, string_max=Version.C['descriptionLength']):
+    if not is_legal_length(description, string_max=Version.C['descriptionLength']):
         return error_response(Error.ILLEGAL_DESCRIPTION_LENGTH)
 
     matched = re.search('^([a-zA-Z0-9_.\s]+)$', version)
@@ -174,10 +181,10 @@ def create_version(request):
     if md5 is None or sha1 is None:
         return error_response(Error.ERROR_GET_HASH)
 
-    o_version, ret_code = create_version_func(apps, level, version, file_name, md5, sha1, description_encoded)
+    o_version, ret_code = create_version_func(apps, level, version, file_name, md5, sha1, description)
     if ret_code != Error.OK:
         return error_response(ret_code)
-    return response()
+    return response(body=dict(url=file_name, md5=md5, sha1=sha1))
 
 
 @require_login

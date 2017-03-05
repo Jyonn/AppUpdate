@@ -143,6 +143,8 @@ APP_URL = os.path.join(MEDIA_ROOT, 'app', '')
 LOGO_URL = os.path.join(MEDIA_ROOT, 'logo', '')
 TEMP_URL = os.path.join(MEDIA_ROOT, 'temp', '')
 
-LOGO_MAX_SIZE = 1024 * 1024
-
+LOGO_MAX_SIZE = 1048576  # 1M
+APP_MAX_SIZE = 10485760  # 10M
 SESSION_COOKIE_AGE = 60 * 60 * 24
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10M

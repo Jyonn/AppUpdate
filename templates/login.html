@@ -8,239 +8,17 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.json.js"></script>
+    <script src="/js/base64.min.js"></script>
     <script src="/js/ripples.min.js"></script>
     <script src="/js/material.min.js"></script>
     <link href="/css/bootstrap-material-design.css" rel="stylesheet">
     <link href="/css/ripples.min.css" rel="stylesheet">
-    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
+{#    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">#}
+    <link rel="stylesheet" href="/css/common.css">
     <style>
         body {
-          padding-top: 50px
-        }
-
-        #banner {
-          border-bottom: none
-        }
-
-        .page-header h1 {
-          font-size: 4em
-        }
-
-        .bs-docs-section {
-          margin-top: 8em
-        }
-
-        .bs-component {
-          position: relative
-        }
-
-        .bs-component .modal {
-          position: relative;
-          top: auto;
-          right: auto;
-          left: auto;
-          bottom: auto;
-          z-index: 1;
-          display: block
-        }
-
-        .bs-component .modal-dialog {
-          width: 90%
-        }
-
-        .bs-component .popover {
-          position: relative;
-          display: inline-block;
-          width: 220px;
-          margin: 20px
-        }
-
-        #source-button {
-          position: absolute;
-          top: 0;
-          right: 0;
-          z-index: 100;
-          font-weight: bold;
-          padding: 5px 10px;
-        }
-
-        .progress {
-          margin-bottom: 10px
-        }
-
-        footer {
-          margin: 5em 0
-        }
-
-        footer li {
-          float: left;
-          margin-right: 1.5em;
-          margin-bottom: 1.5em
-        }
-
-        footer p {
-          clear: left;
-          margin-bottom: 0
-        }
-
-        .splash {
-          padding: 4em 0 0;
-          background-color: #141d27;
-          color: #fff;
-          text-align: center
-        }
-
-        .splash h1 {
-          font-size: 4em
-        }
-
-        .splash #social {
-          margin: 2em 0
-        }
-
-        .splash .alert {
-          margin: 2em 0
-        }
-
-        .section-tout {
-          padding: 4em 0 3em;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-          background-color: #eaf1f1
-        }
-
-        .section-tout .fa {
-          margin-right: .5em
-        }
-
-        .section-tout p {
-          margin-bottom: 3em
-        }
-
-        .section-preview {
-          padding: 4em 0 4em
-        }
-
-        .section-preview .preview {
-          margin-bottom: 4em;
-          background-color: #eaf1f1
-        }
-
-        .section-preview .preview .image {
-          position: relative
-        }
-
-        .section-preview .preview .image:before {
-          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: "";
-          pointer-events: none
-        }
-
-        .section-preview .preview .options {
-          padding: 1em 2em 2em;
-          border: 1px solid rgba(0, 0, 0, 0.05);
-          border-top: none;
-          text-align: center
-        }
-
-        .section-preview .preview .options p {
-          margin-bottom: 2em
-        }
-
-        .section-preview .dropdown-menu {
-          text-align: left
-        }
-
-        .section-preview .lead {
-          margin-bottom: 2em
-        }
-
-        @media (max-width: 767px) {
-          .section-preview .image img {
-            width: 100%
-          }
-        }
-
-        .sponsor {
-          text-align: center
-        }
-
-        .sponsor a:hover {
-          text-decoration: none
-        }
-
-        @media (max-width: 767px) {
-          #banner {
-            margin-bottom: 2em;
-            text-align: center
-          }
-        }
-
-        .infobox .btn-sup {
-          color: rgba(0, 0, 0, 0.5);
-          font-weight: bold;
-          font-size: 15px;
-          line-height: 30px;
-        }
-
-        .infobox .btn-sup img {
-          opacity: 0.5;
-          height: 30px;
-        }
-
-        .infobox .btn-sup span {
-          padding-left: 10px;
-          position: relative;
-          top: 2px;
-        }
-
-        .icons-material .row {
-          margin-bottom: 20px;
-        }
-
-        .icons-material .col-xs-2 {
-          text-align: center;
-        }
-
-        .icons-material i {
-          font-size: 34pt;
-        }
-
-        .icon-preview {
-          display: inline-block;
-          padding: 10px;
-          margin: 10px;
-          background: #D5D5D5;
-          border-radius: 3px;
-          cursor: pointer;
-        }
-
-        .icon-preview span {
-          display: none;
-          position: absolute;
-          background: black;
-          color: #EEE;
-          padding: 5px 8px;
-          font-size: 15px;
-          border-radius: 2px;
-          z-index: 10;
-        }
-
-        .icon-preview:hover i {
-          color: #4285f4;
-        }
-
-        .icon-preview:hover span {
-          display: block;
-          cursor: text;
-        }
-
-        body {
-            background: url('/background.jpg') center fixed;
+            background: url('/img/background.jpg') center fixed;
         }
 
         #login-modal {
@@ -253,6 +31,30 @@
     </style>
 
     <script>
+        function postJSON(url, json_str, success_function) {
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data : json_str,
+                async: true,
+                dataType : 'json',
+                contentType : 'application/text',
+                success : success_function,
+                error : function(xhr, error, exception) {
+                    // handle the error.
+                    alert(exception.toString());
+                }
+            });
+        }
+
+        function encodedJSON(dict) {
+            for (var key in dict)
+                if (dict.hasOwnProperty(key)) {
+                    dict[key] = Base64.encode(dict[key]);
+                }
+            return $.toJSON(dict)
+        }
+
         $(function () {
             $.material.init();
         });
@@ -265,38 +67,84 @@
             dropdown.find('#open-source').click(function () {
                 window.open('https://github.com/lqj679ssn/');
             });
+            {% if request.session.isLogin %}
+            $('#navbar-logout').click(function () {
+                postJSON('/developer/logout/', '', function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    window.location.reload();
+                });
+            });
+            {% else %}
             $('#navbar-login').click(function () {
                 window.location = '/app/login/redirect='+window.location.pathname;
-            })
+            });
+            {% endif %}
+            $('.navbar-brand').click(function () {
+                window.location = '/';
+            });
+        });
+
+        $(document).ready(function () {
+            $("#loading").fadeOut(0);
+            var login_dialog = $('#login-modal');
+            login_dialog.find('.btn-primary').click(function () {
+                var usernameInput = $('#usernameInput'),
+                    passwordInput = $('#passwordInput'),
+                    username = usernameInput.val(),
+                    password = passwordInput.val(),
+                    post = { username: username, password: password },
+                    json_str = encodedJSON(post);
+
+                    usernameInput.val("");
+                    passwordInput.val("");
+                $("#loading").fadeIn(1000);
+                postJSON('/developer/login/', json_str, function (response) {
+                    if (response.code != 0) {
+                        $("#loading").fadeOut(1000);
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    else {
+                        window.location = '{{ redirect }}';
+                    }
+                });
+            });
         })
     </script>
 </head>
 <body>
+    <div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand">主页</a>
+                <a class="navbar-brand hand_pt">主页</a>
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a>Active</a></li>
-                    <li><a>Link</a></li>
-                </ul>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control col-md-8" placeholder="搜索关键词">
-                    </div>
-                </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a id="navbar-login">登录</a></li>
+                {% if request.session.isLogin %}
+                    <li><a id="navbar-logout" class="hand_pt">登出</a></li>
+                {% else %}
+                    <li><a id="navbar-login" class="hand_pt">登录</a></li>
+                {% endif %}
                     <li class="dropdown">
-                        <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a data-target="#" class="dropdown-toggle hand_pt" data-toggle="dropdown">
                             更多<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a id="connect-me">联系作者</a></li>
+                            <li><a id="connect-me" class="hand_pt">联系作者</a></li>
                             <li class="divider"></li>
-                            <li><a id="open-source">代码开放</a></li>
+                            <li><a id="open-source" class="hand_pt">代码开放</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -313,12 +161,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group label-floating">
-                          <label class="control-label" for="focusedInput1">账号</label>
-                          <input class="form-control" id="focusedInput1" type="text">
+                          <label class="control-label" for="usernameInput">账号</label>
+                          <input class="form-control" id="usernameInput" type="text">
                         </div>
                         <div class="form-group label-floating">
-                          <label class="control-label" for="focusedInput1">密码</label>
-                          <input class="form-control" id="focusedInput1" type="password">
+                          <label class="control-label" for="passwordInput">密码</label>
+                          <input class="form-control" id="passwordInput" type="password">
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -3,243 +3,26 @@
 <head>
     <meta charset="utf-8">
     <title>App Update Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="/js/jquery.json.js"></script>
+    <script src="/js/base64.min.js"></script>
     <script src="/js/ripples.min.js"></script>
     <script src="/js/material.min.js"></script>
     <link href="/css/bootstrap-material-design.css" rel="stylesheet">
     <link href="/css/ripples.min.css" rel="stylesheet">
-    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
+{#    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">#}
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="/js/modernizr.touch.js"></script>
+    <link href="/css/mfb.min.css" rel="stylesheet">
+    <script src="/js/mfb.min.js"></script>
     <style>
-        body {
-          padding-top: 50px
-        }
-
-        #banner {
-          border-bottom: none
-        }
-
-        .page-header h1 {
-          font-size: 4em
-        }
-
-        .bs-docs-section {
-          margin-top: 8em
-        }
-
-        .bs-component {
-          position: relative
-        }
-
-        .bs-component .modal {
-          position: relative;
-          top: auto;
-          right: auto;
-          left: auto;
-          bottom: auto;
-          z-index: 1;
-          display: block
-        }
-
-        .bs-component .modal-dialog {
-          width: 90%
-        }
-
-        .bs-component .popover {
-          position: relative;
-          display: inline-block;
-          width: 220px;
-          margin: 20px
-        }
-
-        #source-button {
-          position: absolute;
-          top: 0;
-          right: 0;
-          z-index: 100;
-          font-weight: bold;
-          padding: 5px 10px;
-        }
-
-        .progress {
-          margin-bottom: 10px
-        }
-
-        footer {
-          margin: 5em 0
-        }
-
-        footer li {
-          float: left;
-          margin-right: 1.5em;
-          margin-bottom: 1.5em
-        }
-
-        footer p {
-          clear: left;
-          margin-bottom: 0
-        }
-
-        .splash {
-          padding: 4em 0 0;
-          background-color: #141d27;
-          color: #fff;
-          text-align: center
-        }
-
-        .splash h1 {
-          font-size: 4em
-        }
-
-        .splash #social {
-          margin: 2em 0
-        }
-
-        .splash .alert {
-          margin: 2em 0
-        }
-
-        .section-tout {
-          padding: 4em 0 3em;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-          background-color: #eaf1f1
-        }
-
-        .section-tout .fa {
-          margin-right: .5em
-        }
-
-        .section-tout p {
-          margin-bottom: 3em
-        }
-
-        .section-preview {
-          padding: 4em 0 4em
-        }
-
-        .section-preview .preview {
-          margin-bottom: 4em;
-          background-color: #eaf1f1
-        }
-
-        .section-preview .preview .image {
-          position: relative
-        }
-
-        .section-preview .preview .image:before {
-          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: "";
-          pointer-events: none
-        }
-
-        .section-preview .preview .options {
-          padding: 1em 2em 2em;
-          border: 1px solid rgba(0, 0, 0, 0.05);
-          border-top: none;
-          text-align: center
-        }
-
-        .section-preview .preview .options p {
-          margin-bottom: 2em
-        }
-
-        .section-preview .dropdown-menu {
-          text-align: left
-        }
-
-        .section-preview .lead {
-          margin-bottom: 2em
-        }
-
-        @media (max-width: 767px) {
-          .section-preview .image img {
-            width: 100%
-          }
-        }
-
-        .sponsor {
-          text-align: center
-        }
-
-        .sponsor a:hover {
-          text-decoration: none
-        }
-
-        @media (max-width: 767px) {
-          #banner {
-            margin-bottom: 2em;
-            text-align: center
-          }
-        }
-
-        .infobox .btn-sup {
-          color: rgba(0, 0, 0, 0.5);
-          font-weight: bold;
-          font-size: 15px;
-          line-height: 30px;
-        }
-
-        .infobox .btn-sup img {
-          opacity: 0.5;
-          height: 30px;
-        }
-
-        .infobox .btn-sup span {
-          padding-left: 10px;
-          position: relative;
-          top: 2px;
-        }
-
-        .icons-material .row {
-          margin-bottom: 20px;
-        }
-
-        .icons-material .col-xs-2 {
-          text-align: center;
-        }
-
-        .icons-material i {
-          font-size: 34pt;
-        }
-
-        .icon-preview {
-          display: inline-block;
-          padding: 10px;
-          margin: 10px;
-          background: #D5D5D5;
-          border-radius: 3px;
-          cursor: pointer;
-        }
-
-        .icon-preview span {
-          display: none;
-          position: absolute;
-          background: black;
-          color: #EEE;
-          padding: 5px 8px;
-          font-size: 15px;
-          border-radius: 2px;
-          z-index: 10;
-        }
-
-        .icon-preview:hover i {
-          color: #4285f4;
-        }
-
-        .icon-preview:hover span {
-          display: block;
-          cursor: text;
-        }
-
         .well-footer {
             text-align: right;
         }
@@ -261,9 +44,52 @@
         .app-item {
             margin-bottom: 50px;
         }
+
+        .app-name {
+            color: #f44336;
+        }
+
+        .add-item {
+            height: 150px;
+            display: -webkit-box;
+            -webkit-box-align: center;
+            -webkit-box-orient: horizontal;
+            -webkit-box-pack: center;
+        }
+
+        #add-img {
+            height: 50px;
+            width: 50px;
+        }
     </style>
 
     <script>
+        {% if request.session.isLogin %}
+        function postJSON(url, json_str, success_function) {
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data : json_str,
+                async: true,
+                dataType : 'json',
+                contentType : 'application/text',
+                success : success_function,
+                error : function(xhr, error, exception) {
+                    // handle the error.
+                    alert(exception.toString());
+                }
+            });
+        }
+
+        function encodedJSON(dict) {
+            for (var key in dict)
+                if (dict.hasOwnProperty(key)) {
+                    dict[key] = Base64.encode(dict[key]);
+                }
+            return $.toJSON(dict)
+        }
+        {% endif %}
+
         $(function () {
             $.material.init();
         });
@@ -276,50 +102,116 @@
             dropdown.find('#open-source').click(function () {
                 window.open('https://github.com/lqj679ssn/');
             });
+            {% if request.session.isLogin %}
+            $('#navbar-logout').click(function () {
+                postJSON('/developer/logout/', '', function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    window.location.reload();
+                });
+            });
+            {% else %}
             $('#navbar-login').click(function () {
                 window.location = '/app/login/redirect='+window.location.pathname;
-            })
+            });
+            {% endif %}
+            $('.navbar-brand').click(function () {
+                window.location = '/';
+            });
         });
 
         $(document).ready(function () {
             var app_btns = $('#apps');
             app_btns.find('.btn-primary').click(function () {
-                var appEnglishName = $(this).attr('data-unique');
-
+                if ($(this).attr('data-url') == "")
+                    return;
+                var dialog = $('#file-dl-dialog');
+                dialog.find('#md5').text('MD5 :'+$(this).attr('data-md5'));
+                dialog.find('#sha1').text('SHA1:'+$(this).attr('data-sha1'));
+                window.location = '/app/dl/'+$(this).attr('data-name')+'/'+$(this).attr('data-url');
             });
             app_btns.find('.btn-default').click(function () {
                 var appEnglishName = $(this).attr('data-unique');
                 window.location = '/app/detail/'+appEnglishName;
             });
-        })
+            {% if request.session.isLogin %}
+            var del_dialog = $('#delete-dialog'),
+                add_dialog = $('#add-dialog');
+            app_btns.find('.btn-danger').click(function () {
+                var appName = $(this).attr('data-app-name'),
+                    appEnglishName = $(this).attr('data-eng-name');
+                del_dialog.find('.app-name').text(appName+'（'+appEnglishName+'）');
+                del_dialog.find('.btn-danger').attr('data-unique', appEnglishName);
+            });
+            del_dialog.find('.btn-danger').click(function () {
+                var appEnglishName = $(this).attr('data-unique'),
+                    post = { appEnglishName : appEnglishName },
+                    json_str = encodedJSON(post);
+
+                postJSON('/app/set-dead/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    window.location.reload();
+                });
+            });
+            add_dialog.find('.btn-primary').click(function () {
+                var appNameInput = $('#appNameInput'),
+                    appEnglishNameInput = $('#appEnglishNameInput'),
+                    descriptionInput = $('#descriptionInput'),
+                    appName = appNameInput.val(),
+                    appEnglishName = appEnglishNameInput.val(),
+                    description = descriptionInput.val(),
+                    post = { appName: appName, appEnglishName: appEnglishName, description: description },
+                    json_str = encodedJSON(post);
+                appNameInput.val("");
+                appEnglishNameInput.val("");
+
+                postJSON('/app/create/', json_str, function (response) {
+                    if (response.code != 0) {
+                        alert('错误'+response.code+'：'+response.msg);
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                });
+            });
+            var descriptionInput = $('#descriptionInput');
+            descriptionInput.on('input', function () {
+                var count = descriptionInput.val().length,
+                    desc_count = $('#desc_count');
+                desc_count.text(count);
+                if (count > 1000)
+                    desc_count.css('color', '#f44336');
+                else
+                    desc_count.css('color', '#009688');
+            });
+            {% endif %}
+        });
     </script>
 </head>
 <body>
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand">主页</a>
+                <a class="navbar-brand hand_pt">主页</a>
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a>Active</a></li>
-                    <li><a>Link</a></li>
-                </ul>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control col-md-8" placeholder="搜索关键词">
-                    </div>
-                </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a id="navbar-login">登录</a></li>
+                {% if request.session.isLogin %}
+                    <li><a id="navbar-logout" class="hand_pt">登出</a></li>
+                {% else %}
+                    <li><a id="navbar-login" class="hand_pt">登录</a></li>
+                {% endif %}
                     <li class="dropdown">
-                        <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a data-target="#" class="dropdown-toggle hand_pt" data-toggle="dropdown">
                             更多<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a id="connect-me">联系作者</a></li>
+                            <li><a id="connect-me" class="hand_pt">联系作者</a></li>
                             <li class="divider"></li>
-                            <li><a id="open-source">代码开放</a></li>
+                            <li><a id="open-source" class="hand_pt">代码开放</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -344,7 +236,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="col-sm-2">
-                            <img class="round-image round-image-normal" src='{% if app.logo %}{{ "/app/logo/"|add:app.appEnglishName|add:"_"|add:app.logo }}{% else %}{{ "/app/logo/default.png" }}{% endif %}'>
+                            <img class="round-image round-image-normal" src='{{ app.logo }}'>
                         </div>
                         <div class="col-sm-10">
                             <h4 class="modal-title">{{ app.appName }}（{{ app.appEnglishName }}）</h4>
@@ -352,17 +244,93 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        {{ app.description }}
+                        <pre>{{ app.description }}</pre>
                     </div>
                     <div class="modal-footer">
+                        {% if request.session.isLogin %}
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#delete-dialog" data-eng-name='{{ app.appEnglishName }}' data-app-name='{{ app.appName }}'>删除应用</button>
+                        {% endif %}
                         <button class="btn btn-default" data-unique='{{ app.appEnglishName }}'>了解应用</button>
-                        <button class="btn btn-primary" data-unique='{{ app.appEnglishName }}'>下载正式版</button>
+                        <button class="btn btn-primary" {% if app.latest.version  %}data-toggle="modal" data-target="#file-dl-dialog" data-version="{{ app.latest.version }}" data-md5="{{ app.latest.md5 }}" data-sha1="{{ app.latest.sha1 }}" data-url="{{ app.latest.url }}" data-name="{{ app.appEnglishName }}" {% else %}disabled="disabled" {% endif %}>下载正式版</button>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
-
 </body>
+
+<div id="file-dl-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">感谢下载</h1>
+            </div>
+            <div class="modal-body">
+                <p id="md5">MD5 :</p>
+                <p id="sha1">SHA1:</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.session.isLogin %}
+<div id="delete-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">删除应用</h1>
+            </div>
+            <div class="modal-body">
+                删除操作不可恢复，是否确认删除 <b class="app-name"></b> ？
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-danger" data-dismiss="modal">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
+    <li class="mfb-component__wrap">
+        <a class="mfb-component__button--main" data-toggle="modal" data-target="#add-dialog">
+            <i class="mfb-component__main-icon--resting ion-plus-round"></i>
+            <i class="mfb-component__main-icon--active ion-plus-round"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="add-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title">添加应用</h1>
+            </div>
+            <div class="modal-body">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="appNameInput">应用名称</label>
+                    <input class="form-control" id="appNameInput" type="text">
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="appEnglishNameInput">应用英文名</label>
+                    <input class="form-control" id="appEnglishNameInput" type="text">
+                </div>
+                <div class="form-group label-floating">
+                    <label for="descriptionInput" class="control-label">应用介绍</label>
+                    <textarea class="form-control" rows="3" id="descriptionInput"></textarea>
+                    <span class="help-block"><b id="desc_count">0</b> / 1000</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" data-dismiss="modal">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 </html>

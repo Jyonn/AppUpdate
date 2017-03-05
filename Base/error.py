@@ -1,4 +1,5 @@
 class Error:
+    APP_FILE_SIZE = 2025
     ERROR_PASSWORD = 2024
     FROZEN_USER = 2023
     NOT_FOUND_USERNAME = 2022
@@ -32,6 +33,7 @@ class Error:
     OK = 0
 
     ERROR_DICT = [
+        (APP_FILE_SIZE, "应用超过最大上传限度（10M）"),
         (ERROR_PASSWORD, "错误的用户名或密码"),
         (FROZEN_USER, "用户已被冻结"),
         (NOT_FOUND_USERNAME, "不存在的用户名"),

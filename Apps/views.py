@@ -94,3 +94,18 @@ def get_exact_version(request):
         return error_response(ret_code)
 
     return response(body=get_version_detail_func(o_version, True))
+
+
+@require_post
+@require_json
+@require_params(['appEnglishName', 'level'])
+def exist(request):
+    app_english_name = request.POST['appEnglishName']
+    level = request.POST['level']
+
+    apps, ret_code = get_apps_by_english_name_func(app_english_name)
+    if ret_code != Error.OK:
+        return error_response(ret_code)
+
+    o_level, ret_code = get_level_func(apps, level)
+    return response(body=(ret_code == Error.OK))

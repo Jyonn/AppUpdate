@@ -97,7 +97,10 @@ def is_legal_length(string, string_min=0, string_max=10):
 
 
 def is_legal_level(level, level_min=0, level_max=10):
-    if level < level_min or level > level_max:
+    try:
+        if int(level) < level_min or int(level) > level_max:
+            return False
+    except:
         return False
     return True
 
@@ -140,13 +143,14 @@ def get_latest_version_func(apps, level, force_level=False):
 
 def get_version_detail_func(o_version, with_url=False):
     detail = dict(
-        level=o_version.relatedLevel.level,
-        note=o_version.relatedLevel.note,
+        # level=o_version.relatedLevel.level,
+        # note=o_version.relatedLevel.note,
         description=o_version.description,
         version=o_version.version,
-        updateDatetime=get_readable_time_string(o_version.updateDatetime, only_date=True),
+        updateDatetime=get_readable_time_string(o_version.updateDatetime),
         relevantTime=get_relevant_time(o_version.updateDatetime),
         isAlive=o_version.isAlive,
+        timeStamp=int(o_version.updateDatetime.timestamp()),
     )
 
     if with_url and o_version.isAlive and o_version.relatedApp.isAlive:
@@ -175,34 +179,24 @@ def get_app_detail(app):
         createDatetime=get_readable_time_string(app.createDatetime),
         relevantTime=get_relevant_time(app.createDatetime),
         isAlive=app.isAlive,
-        logo=app.logo,
+        logo='/app/logo/'+app.appEnglishName+'_'+app.logo if app.logo else '/app/logo/default.png',
         versions=versions.count(),
         description=app.description,
     )
 
 
 def get_app_list_func():
-    apps = Apps.objects.all()
+    apps = Apps.objects.filter(isAlive=True)
 
     detail_dict = []
     for app in apps:
-        versions = Version.objects.filter(relatedApp=app, isAlive=True)
-        detail_dict.append(dict(
-            appName=app.appName,
-            appEnglishName=app.appEnglishName,
-            createDatetime=get_readable_time_string(app.createDatetime),
-            relevantTime=get_relevant_time(app.createDatetime),
-            isAlive=app.isAlive,
-            logo=app.logo,
-            versions=versions.count(),
-            description=app.description,
-        ))
+        detail_dict.append(get_app_detail(app))
     return detail_dict
 
 
 def get_level_list_func(apps):
     try:
-        levels = Level.objects.filter(relatedApp=apps)
+        levels = Level.objects.filter(relatedApp=apps).order_by('level')
     except:
         levels = []
 
@@ -219,17 +213,17 @@ def get_level_list_func(apps):
 
 def get_version_list_func(apps, level):
     try:
-        versions = Version.objects.filter(relatedApp=apps, relatedLevel__level=level)
+        versions = Version.objects.filter(relatedApp=apps, relatedLevel__level=level, isAlive=True)
     except:
         versions = []
 
     detail_dict = []
     for o_version in versions:
-        detail_dict.append(get_version_detail_func(o_version))
+        detail_dict.append(get_version_detail_func(o_version, with_url=True))
     return detail_dict
 
 
-def create_app_func(app_name, app_english_name):
+def create_app_func(app_name, app_english_name, description):
     matched = re.search('^([a-zA-Z0-9_-]+)$', app_english_name)
     if matched is None:
         return None, Error.ILLEGAL_APP_ENGLISH_NAME
@@ -241,7 +235,7 @@ def create_app_func(app_name, app_english_name):
         return None, Error.ILLEGAL_APP_NAME_LENGTH
 
     try:
-        apps = Apps.create(app_name, app_english_name)
+        apps = Apps.create(app_name, app_english_name, description)
     except:
         return None, Error.ADD_APPS_FAILED
 

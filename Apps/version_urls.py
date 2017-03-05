@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^get-all/$', get_versions),
     url(r'^get-exact/$', get_exact_version),
     url(r'^get-state/$', get_state),
+    url(r'^exist/$', exist),
 ]
