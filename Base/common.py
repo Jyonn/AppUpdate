@@ -276,7 +276,7 @@ def get_file_hash(file_path):
     import hashlib
 
     try:
-        file = open(file_path, "rb")
+        file = codecs.open(file_path, "rb")
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         while True:
