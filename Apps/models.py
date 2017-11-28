@@ -58,7 +58,7 @@ class Apps(models.Model):
 
 class Level(models.Model):
     C = {
-        'noteLength': 10
+        'noteLength': 20
     }
     relatedApp = models.ForeignKey(
         Apps,
