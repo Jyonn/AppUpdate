@@ -1,5 +1,6 @@
 import os
 import re
+import codecs
 
 import datetime
 
@@ -77,7 +78,7 @@ def get_user_from_session(request):
 
 
 def save_file_to_local(save_file, file_path):
-    with open(file_path, "wb+") as f:
+    with codecs.open(file_path, "wb+") as f:
         for chunk in save_file.chunks():
             f.write(chunk)
         f.close()
