@@ -1,6 +1,6 @@
 import os
 import re
-import codecs
+# import codecs
 
 import datetime
 
@@ -78,7 +78,7 @@ def get_user_from_session(request):
 
 
 def save_file_to_local(save_file, file_path):
-    with codecs.open(file_path, "wb+", encoding='utf8') as f:
+    with open(file_path, "wb+") as f:
         for chunk in save_file.chunks():
             f.write(chunk)
         f.close()
@@ -276,7 +276,7 @@ def get_file_hash(file_path):
     import hashlib
 
     try:
-        file = codecs.open(file_path, "rb", encoding='utf8')
+        file = open(file_path, "rb")
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         while True:
