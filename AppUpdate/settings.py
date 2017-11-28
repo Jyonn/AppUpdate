@@ -136,12 +136,14 @@ STATICFILES_FINDERS = (
 
 if 'Linux' == platform.system():
     MEDIA_ROOT = '/home/web/AppUpdate'
+elif 'Darwin' == platform.system():
+    MEDIA_ROOT = '/Users/adelliu/WebSource/AppUpdate'
 else:
     MEDIA_ROOT = 'D:/Program/web/AppUpdate'
 
-APP_URL = os.path.join(MEDIA_ROOT, 'app', '')
-LOGO_URL = os.path.join(MEDIA_ROOT, 'logo', '')
-TEMP_URL = os.path.join(MEDIA_ROOT, 'temp', '')
+APP_URL = os.path.join(MEDIA_ROOT, 'app')
+LOGO_URL = os.path.join(MEDIA_ROOT, 'logo')
+TEMP_URL = os.path.join(MEDIA_ROOT, 'temp')
 
 LOGO_MAX_SIZE = 1048576  # 1M
 APP_MAX_SIZE = 10485760  # 10

@@ -157,9 +157,9 @@ def create_version(request):
     if not is_legal_length(description, string_max=Version.C['descriptionLength']):
         return error_response(Error.ILLEGAL_DESCRIPTION_LENGTH)
 
-    matched = re.search('^([a-zA-Z0-9_.\s]+)$', version)
-    if matched is None:
-        return error_response(Error.ILLEGAL_VERSION)
+    # matched = re.search('^([a-zA-Z0-9_.\s]+)$', version)
+    # if matched is None:
+    #     return error_response(Error.ILLEGAL_VERSION)
 
     apps, ret_code = get_apps_by_english_name_func(app_english_name)
     if ret_code != Error.OK:
